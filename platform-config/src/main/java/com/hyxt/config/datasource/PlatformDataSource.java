@@ -39,10 +39,10 @@ public class PlatformDataSource implements ApplicationContextAware , ConstantsCo
         druidDataSource.setUrl(env.getProperty(PROJECT_DRUID_DATASOURCE_URL));
         druidDataSource.setPassword(env.getProperty(PROJECT_DRUID_DATASOURCE_PASSWORD));
         druidDataSource.setFilters(env.getProperty(PROJECT_DRUID_DATASOURCE_FILTERS));
-        druidDataSource.setMaxActive(Integer.valueOf(env.getProperty(PROJECT_DRUID_DATASOURCE_MAXACTIVE)));
-        druidDataSource.setInitialSize(Integer.valueOf(env.getProperty(PROJECT_DRUID_DATASOURCE_INITIALSIZE)));
-        druidDataSource.setMaxWait(Integer.valueOf(env.getProperty(PROJECT_DRUID_DATASOURCE_MAXWAIT)));
-        druidDataSource.setMinIdle(Integer.valueOf(env.getProperty(PROJECT_DRUID_DATASOURCE_MINIDLE)));
+        druidDataSource.setMaxActive(env.getProperty(PROJECT_DRUID_DATASOURCE_MAXACTIVE , Integer.class));
+        druidDataSource.setInitialSize(env.getProperty(PROJECT_DRUID_DATASOURCE_INITIALSIZE , Integer.class));
+        druidDataSource.setMaxWait(env.getProperty(PROJECT_DRUID_DATASOURCE_MAXWAIT , Integer.class));
+        druidDataSource.setMinIdle(env.getProperty(PROJECT_DRUID_DATASOURCE_MINIDLE , Integer.class));
         druidDataSource.setTimeBetweenEvictionRunsMillis(env.getProperty(PROJECT_DRUID_DATASOURCE_TIME_BETWEEN_EVICTION_RUNS_MILLIS , Integer.class));
         druidDataSource.setMinEvictableIdleTimeMillis(env.getProperty(PROJECT_DRUID_DATASOURCE_MIN_EVICTABLE_IDLE_TIME_MILLIS , Integer.class));
         druidDataSource.setValidationQuery(env.getProperty(PROJECT_DRUID_DATASOURCE_VALIDATION_QUERY));
@@ -54,7 +54,7 @@ public class PlatformDataSource implements ApplicationContextAware , ConstantsCo
         return druidDataSource;
     }
 
-    @Bean( name = "stat-filter")
+    @Bean(name = "stat-filter")
     public StatFilter statFilter() {
         Environment env = getEnv();
         StatFilter statFilter = new StatFilter();
@@ -68,7 +68,7 @@ public class PlatformDataSource implements ApplicationContextAware , ConstantsCo
         FilterRegistrationBean filterRegistrationBean =  new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new WebStatFilter());
         Map<String, String> initParameters = new HashMap<String, String>(1);
-        initParameters.put("exclusions" , "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
+        initParameters.put("exclusions" , "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/platform/*");
         filterRegistrationBean.setInitParameters(initParameters);
         return filterRegistrationBean;
     }
